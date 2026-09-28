@@ -1,13 +1,12 @@
 <IfModule mod_rewrite.c>
-    Options -Indexes
     RewriteEngine On
 
-    # Serve files/directories from Laravel public/ when Apache is still
-    # pointing at the project root (e.g. a local Laragon auto-vhost).
+    # The Laragon auto-vhost may point at the project root instead of public/.
+    # Serve existing public assets directly.
     RewriteCond %{DOCUMENT_ROOT}/public/$1 -f [OR]
     RewriteCond %{DOCUMENT_ROOT}/public/$1 -d
     RewriteRule ^(.+)$ public/$1 [L]
 
-    # Send every application request to Laravel's public front controller.
+    # Send application requests to Laravel's public front controller.
     RewriteRule ^ public/index.php [L]
 </IfModule>
