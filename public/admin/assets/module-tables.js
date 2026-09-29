@@ -107,9 +107,25 @@
         const b=document.createElement('button'); b.type='button'; b.className='btn btn-primary'; b.dataset.addAgent='1'; b.textContent='Add Agent / Reseller'; head.prepend(b); b.addEventListener('click',()=>document.dispatchEvent(new CustomEvent('almara:open-agent-modal')));
         // agent.js binds by button text; its observer will also see this button.
     }
+    let lastKey = null;
+    let renderScheduled = false;
     function boot(){
         const content=document.getElementById('content'); if(!content) return;
-        new MutationObserver(()=>requestAnimationFrame(render)).observe(content,{childList:true,subtree:true});
+        // Observe only direct page replacements. Do not observe the whole subtree:
+        // table rendering itself changes descendants and would cause render loops.
+        new MutationObserver(() => {
+            if (renderScheduled) return;
+            renderScheduled = true;
+            requestAnimationFrame(() => {
+                renderScheduled = false;
+                const nextKey = key();
+                if (nextKey !== lastKey) {
+                    lastKey = nextKey;
+                    render();
+                }
+            });
+        }).observe(content,{childList:true});
+        lastKey = key();
         render();
     }
     document.addEventListener('DOMContentLoaded', boot);
