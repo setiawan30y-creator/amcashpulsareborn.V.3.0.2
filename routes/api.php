@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AgentController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\TenantController;
@@ -15,7 +16,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/me', [AuthController::class, 'me']);
 
         Route::get('/dashboard', [DashboardController::class, 'index']);
-
         Route::get('/tenant', [TenantController::class, 'show']);
+
+        Route::apiResource('agents', AgentController::class);
     });
 });
