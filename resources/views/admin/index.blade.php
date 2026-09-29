@@ -6,7 +6,8 @@
     <meta name="theme-color" content="#0b1220">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Almara PPOB — Admin</title>
-    <link rel="stylesheet" href="{{ asset('admin/assets/app.css') }}">
+    <link rel="preload" href="{{ asset('admin/assets/app.css') }}" as="style">
+    <link rel="stylesheet" href="{{ asset('admin/assets/app.css') }}?v={{ file_exists(public_path('admin/assets/app.css')) ? filemtime(public_path('admin/assets/app.css')) : '1' }}">
 </head>
 <body>
 <div class="app-shell" id="appShell">
@@ -42,8 +43,6 @@
     </main>
 </div>
 <script>window.ALMARA={apiBase:@json(url('/api/v1')), csrf:@json(csrf_token())};</script>
-<script src="{{ asset('admin/assets/app.js') }}"></script>
-<script src="{{ asset('admin/assets/module-tables.js') }}"></script>
-<script src="{{ asset('admin/assets/agent.js') }}"></script>
+<script src="{{ asset('admin/assets/app.js') }}?v={{ file_exists(public_path('admin/assets/app.js')) ? filemtime(public_path('admin/assets/app.js')) : '1' }}" defer></script>
 </body>
 </html>
