@@ -43,5 +43,6 @@
 </div>
 <script>window.ALMARA={apiBase:@json(url('/api/v1')), csrf:@json(csrf_token())};</script>
 <script src="{{ asset('admin/assets/app.js') }}"></script>
+<script src="{{ asset('admin/assets/agent.js') }}"></script>
 </body>
 </html>
