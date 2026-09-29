@@ -129,8 +129,19 @@
         wrap.querySelector('input[name="name"]')?.focus();
     }
 
+    let active = false;
+    let lastTitle = '';
     function activate() {
-        if (document.getElementById('pageTitle')?.textContent !== 'Agent / Reseller') return;
+        const title = document.getElementById('pageTitle')?.textContent || '';
+        if (title === lastTitle) return;
+        lastTitle = title;
+
+        if (title !== 'Agent / Reseller') {
+            active = false;
+            return;
+        }
+
+        active = true;
         render();
         const button = [...document.querySelectorAll('#content .btn.btn-primary')].find(b => /add agent/i.test(b.textContent));
         if (button && !button.dataset.agentBound) {
@@ -141,8 +152,8 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        const content = document.getElementById('content');
-        if (content) new MutationObserver(() => requestAnimationFrame(activate)).observe(content, { childList: true, subtree: true });
-        setTimeout(activate, 100);
+        // Listen only for page/title changes, not every DOM mutation inside tables/modals.
+        window.addEventListener('almara:page-changed', activate);
+        requestAnimationFrame(activate);
     });
 })();
